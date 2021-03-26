@@ -16,13 +16,21 @@ class Url_reading(unittest.TestCase):
             'B02K_CUSTNAME=FIRST%20LAST&B02K_KEYVERS=0001&'
             'B02K_ALG=03&B02K_CUSTID=9984&B02K_CUSTTYPE=02&'
             'B02K_MAC=EBA959A76B87AE8996849E7C0C08D4AC44B053183BE12C0DAC2AD0C86F9F2542'
-        )
+        ).lower()
     def test_extract_returns_dict_from_valid_url(self):
         self.assertIsInstance(extract(self.valid_url),dict,
             "extract returns a non dictionary object"
         )
     def test_extract_returns_all_10_items_from_valid_url(self):
-        self.assertEqual(len(extract(self.valid_url)), 10)
+        result = extract(self.valid_url)
+        keys = ['B02K_VERS','B02K_TIMESTMP','B02K_IDNBR','B02K_STAMP',
+            'B02K_CUSTNAME','B02K_KEYVERS','B02K_ALG','B02K_CUSTID',
+            'B02K_CUSTTYPE','B02K_MAC'
+        ]
+        self.assertEqual(len(result), 10,
+            "Looks like there's are not exactly 10 data items in this url")
+        for key in keys:
+            self.assertIn(key, result, f'missing {key}')
 
 
 class Signature_verification(unittest.TestCase):
