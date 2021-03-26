@@ -6,7 +6,7 @@ import hashlib
 ERROR_URL = 'http://error'
 
 def extract(given_url):
-    return [i for i in range(10)]
+    return {i:2*i for i in range(10)}
 
 def valid_signature(given_url):
     # B02K_VERS, B02K_TIMESTMP, B02K_IDNBR, 
