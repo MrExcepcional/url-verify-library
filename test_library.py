@@ -9,9 +9,21 @@ from checkurl import valid_signature, extract
 
 class Url_reading(unittest.TestCase):
     """docstring for Url_reading"""
+    def setUp(self):
+        self.valid_url = ('http://someserver.com/?'
+            'B02K_VERS=0003&B02K_TIMESTMP=50020181017141433899056&'
+            'B02K_IDNBR=2512408990&B02K_STAMP=20010125140015123456&'
+            'B02K_CUSTNAME=FIRST%20LAST&B02K_KEYVERS=0001&'
+            'B02K_ALG=03&B02K_CUSTID=9984&B02K_CUSTTYPE=02&'
+            'B02K_MAC=EBA959A76B87AE8996849E7C0C08D4AC44B053183BE12C0DAC2AD0C86F9F2542'
+        )
+    def test_extract_returns_dict_from_valid_url(self):
+        self.assertIsInstance(extract(self.valid_url),dict,
+            "extract returns a non dictionary object"
+        )
     def test_extract_returns_all_10_items_from_valid_url(self):
-        valid_url = 'http://someserver.com/?B02K_VERS=0003&B02K_TIMESTMP=50020181017141433899056&B02K_IDNBR=2512408990&B02K_STAMP=20010125140015123456&B02K_CUSTNAME=FIRST%20LAST&B02K_KEYVERS=0001&B02K_ALG=03&B02K_CUSTID=9984&B02K_CUSTTYPE=02&B02K_MAC=EBA959A76B87AE8996849E7C0C08D4AC44B053183BE12C0DAC2AD0C86F9F2542'
-        self.assertEqual(len(extract(valid_url)), 10)
+        self.assertEqual(len(extract(self.valid_url)), 10)
+
 
 class Signature_verification(unittest.TestCase):
     """docstring for signature_verification"""
