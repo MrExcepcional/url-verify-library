@@ -6,23 +6,23 @@ import unittest
 # local application imports
 from checkurl import is_valid_signature, _extract
 
-
-class Url_reading(unittest.TestCase):
-    """docstring for Url_reading"""
-    def setUp(self):
-        self.valid_url = ('http://someserver.com/?'
+VALID_URL = ('http://someserver.com/?'
             'B02K_VERS=0003&B02K_TIMESTMP=50020181017141433899056&'
             'B02K_IDNBR=2512408990&B02K_STAMP=20010125140015123456&'
             'B02K_CUSTNAME=FIRST%20LAST&B02K_KEYVERS=0001&'
             'B02K_ALG=03&B02K_CUSTID=9984&B02K_CUSTTYPE=02&'
             'B02K_MAC=EBA959A76B87AE8996849E7C0C08D4AC44B053183BE12C0DAC2AD0C86F9F2542'
-        ).lower()
+).lower()
+
+class Url_reading(unittest.TestCase):
+    """docstring for Url_reading"""
+
     def test_extract_returns_dict_from_valid_url(self):
-        self.assertIsInstance(_extract(self.valid_url),dict,
+        self.assertIsInstance(_extract(VALID_URL),dict,
             "_extract returns a non dictionary object"
         )
     def test_extract_returns_all_10_items_from_valid_url(self):
-        result = _extract(self.valid_url)
+        result = _extract(VALID_URL)
         keys = ['b02k_vers', 'b02k_timestmp', 'b02k_idnbr', 
         'b02k_stamp', 'b02k_custname', 'b02k_keyvers', 
         'b02k_alg', 'b02k_custid', 'b02k_custtype', 'b02k_mac'
@@ -32,7 +32,8 @@ class Url_reading(unittest.TestCase):
         for key in keys:
             self.assertIn(key, result, f'missing {key} in the given_url')
     def test_extract_returns_false_with_bad_url(self):
-        self.fail("finish the test!!")
+        bad_url = 'http://badurl.com/?with&corrupted=data'
+        self.assertFalse(_extract(bad_url))
 
 
 class Signature_verification(unittest.TestCase):
@@ -42,7 +43,5 @@ class Signature_verification(unittest.TestCase):
         corrupted_data = 'http://example.com/?b02k_custname=mrmalware&b02k_mac=267d3b81a9dcd937f3b46a17a57fc0ca2133373389336861142673a73fc17bc6'
         self.assertFalse(is_valid_signature(corrupted_data))
 
-    def test_is_valid_signature(self):
-        normal_data = ''
-        self.assertTrue(is_valid_signature(normal_data))
-        self.fail('finish the test')
+    def test_is_valid_signature_from_integral_signature(self):
+        self.assertTrue(is_valid_signature(VALID_URL))
