@@ -23,14 +23,14 @@ class Url_reading(unittest.TestCase):
         )
     def test_extract_returns_all_10_items_from_valid_url(self):
         result = extract(self.valid_url)
-        keys = ['B02K_VERS','B02K_TIMESTMP','B02K_IDNBR','B02K_STAMP',
-            'B02K_CUSTNAME','B02K_KEYVERS','B02K_ALG','B02K_CUSTID',
-            'B02K_CUSTTYPE','B02K_MAC'
+        keys = ['b02k_vers', 'b02k_timestmp', 'b02k_idnbr', 
+        'b02k_stamp', 'b02k_custname', 'b02k_keyvers', 
+        'b02k_alg', 'b02k_custid', 'b02k_custtype', 'b02k_mac'
         ]
         self.assertEqual(len(result), 10,
             "Looks like there's are not exactly 10 data items in this url")
         for key in keys:
-            self.assertIn(key, result, f'missing {key}')
+            self.assertIn(key, result, f'missing {key} in the given_url')
 
 
 class Signature_verification(unittest.TestCase):
