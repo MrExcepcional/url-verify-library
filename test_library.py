@@ -28,9 +28,11 @@ class Url_reading(unittest.TestCase):
         'b02k_alg', 'b02k_custid', 'b02k_custtype', 'b02k_mac'
         ]
         self.assertEqual(len(result), 10,
-            "Looks like there's are not exactly 10 data items in this url")
+            "Looks like there's are not exactly 10 data items returned from this valid_url")
         for key in keys:
             self.assertIn(key, result, f'missing {key} in the given_url')
+    def test_extract_returns_false_with_bad_url(self):
+        self.fail("finish the test!!")
 
 
 class Signature_verification(unittest.TestCase):
