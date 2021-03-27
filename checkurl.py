@@ -5,7 +5,7 @@ import hashlib
 
 ERROR_URL = 'http://error'
 
-def extract(given_url):
+def _extract(given_url):
     # We just trim the leading domain
     raw_data = given_url.split('?')[1]
     # Then separate each data element
@@ -21,12 +21,14 @@ def extract(given_url):
     data = dict(zip(keys, values))
     return data
 
-def valid_signature(given_url):
+def is_valid_signature(given_url):
     # B02K_VERS, B02K_TIMESTMP, B02K_IDNBR, 
     # B02K_STAMP, B02K_CUSTNAME, B02K_KEYVERS, 
     # B02K_ALG, B02K_CUSTID, B02K_CUSTTYPE, B02K_MAC
-    extracted_data = extract(given_url)
+    extracted_data = _extract(given_url)
+    #if extracted_data:
     B02K_MAC = extracted_data.popitem()
     encoded = "".join(extracted_data.values()).encode('cp1252')
     calculated_signature = hashlib.sha256(encoded)
+        #return calculated_signature == B02K_MAC
     return False
