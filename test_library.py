@@ -2,9 +2,10 @@
 
 # Standard python library
 import unittest
+from urllib.error import URLError
 
 # local application imports
-from checkurl import is_valid_signature, _extract
+from checkurl import is_valid_signature, _extract, url_response
 
 VALID_URL = ('http://someserver.com/?'
             'B02K_VERS=0003&B02K_TIMESTMP=50020181017141433899056&'
@@ -41,7 +42,7 @@ class Signature_verification(unittest.TestCase):
     """docstring for signature_verification"""
 
     def test_returns_false_with_bad_url(self):
-        bad_url = 'http://badurl.com/?with&corrupted=data'
+        bad_url = 'http://badurl.com/?with&strage=data'
         self.assertFalse(is_valid_signature(bad_url, TEST_INPUT_SECRET))
 
     def test_output_is_error_url_from_unverified_signature(self):
@@ -56,5 +57,6 @@ class Signature_verification(unittest.TestCase):
 class Output_url(unittest.TestCase):
     """docstring for test_output_url"""
 
+    # TODO: Let's mock is_valid_signature to return false here
     def test_returns_error_url_from_non_verified_signature(self):
-        self.fail("Finish the test")
+        self.assertRaises(URLError,url_response,'http://non.valid/?url')
