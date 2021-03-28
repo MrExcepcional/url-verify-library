@@ -1,4 +1,4 @@
-
+#!/usr/bin/python3.9
 
 # Standard python library
 import unittest
@@ -71,3 +71,6 @@ class Output_url(unittest.TestCase):
     # TODO: Let's mock is_valid_signature to return false here
     def test_returns_error_url_from_non_verified_signature(self):
         self.assertRaises(URLError,url_response,'http://non.valid/?url')
+
+    def test_returns_string_when_validation_succeds(self):
+        self.assertIsInstance(url_response(VALID_URL), str)
