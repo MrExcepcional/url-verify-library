@@ -2,9 +2,8 @@
 
 import hashlib
 from urllib import parse
+from urllib.error import URLError
 
-
-ERROR_URL = 'http://error'
 
 def _extract(given_url):
     try:
@@ -31,3 +30,6 @@ def is_valid_signature(given_url, input_secret):
         calculated_signature = hashlib.sha256(encoded)
         return calculated_signature.hexdigest() == B02K_MAC
     return False
+
+def url_response(incoming_url):
+    raise URLError(reason="Could not verify url signature")
