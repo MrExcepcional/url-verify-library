@@ -1,30 +1,21 @@
 #!/usr/bin/python3.9
 
 # Standard python library
-import unittest
 from urllib.error import URLError
 
 # local application imports
-from checkurl import is_valid_signature, _extract, url_response
+from base import LibraryTest
 
-VALID_URL = ('http://someserver.com/?'
-            'B02K_VERS=0003&B02K_TIMESTMP=50020181017141433899056&'
-            'B02K_IDNBR=2512408990&B02K_STAMP=20010125140015123456&'
-            'B02K_CUSTNAME=FIRST%20LAST&B02K_KEYVERS=0001&'
-            'B02K_ALG=03&B02K_CUSTID=9984&B02K_CUSTTYPE=02&'
-            'B02K_MAC=EBA959A76B87AE8996849E7C0C08D4AC44B053183BE12C0DAC2AD0C86F9F2542'
-)
-TEST_INPUT_SECRET = 'inputsecret'
 
-class Url_reading(unittest.TestCase):
+class Url_reading(LibraryTest):
     """docstring for Url_reading"""
 
     def test_extract_returns_dict_from_valid_url(self):
-        self.assertIsInstance(_extract(VALID_URL),dict,
+        self.assertIsInstance(self.checkurl._extract(self.valid_url),dict,
             "_extract returns a non dictionary object"
         )
     def test_extract_returns_all_10_items_from_valid_url(self):
-        result = _extract(VALID_URL)
+        result = self.checkurl._extract(self.valid_url)
         keys = ['B02K_VERS','B02K_TIMESTMP','B02K_IDNBR','B02K_STAMP', 
         'B02K_CUSTNAME','B02K_KEYVERS','B02K_ALG','B02K_CUSTID', 
         'B02K_CUSTTYPE','B02K_MAC'
@@ -45,32 +36,32 @@ class Url_reading(unittest.TestCase):
             'B02K_ALG=03&B02K_CUSTID=9984&B02K_CUSTTYPE=02&'
             'B02K_MAC=EBA959A76B87AE8996849E7C0C08D4AC44B053183BE12C0DAC2AD0C86F9F2542'
         )
-        result = _extract(windows_1252_encoded_url)
+        result = self.checkurl._extract(windows_1252_encoded_url)
         self.assertEqual('VÄINÖ MÄKI', result['B02K_CUSTNAME'][0])
 
 
-class Signature_verification(unittest.TestCase):
+class Signature_verification(LibraryTest):
     """docstring for signature_verification"""
 
     def test_is_valid_signature_returns_false_with_bad_url(self):
         bad_url = 'http://badurl.com/?with&strage=data'
-        self.assertFalse(is_valid_signature(bad_url, TEST_INPUT_SECRET))
+        self.assertFalse(self.checkurl.is_valid_signature(bad_url))
 
     def test_output_is_error_url_from_unverified_signature(self):
         corrupted_data = ('http://example.com/?b02k_custname=mr%20malware&'
             'b02k_mac=267d3b81a9dcd937f3b46a17a57fc0ca2133373389336861142673a73fc17bc6')
-        self.assertFalse(is_valid_signature(corrupted_data, TEST_INPUT_SECRET))
+        self.assertFalse(self.checkurl.is_valid_signature(corrupted_data))
 
     def test_is_valid_signature_from_integral_signature(self):
-        self.assertTrue(is_valid_signature(VALID_URL, TEST_INPUT_SECRET))
+        self.assertTrue(self.checkurl.is_valid_signature(self.valid_url))
 
 
-class Output_url(unittest.TestCase):
+class Output_url(LibraryTest):
     """docstring for test_output_url"""
 
     # TODO: Let's mock is_valid_signature to return false here
     def test_returns_error_url_from_non_verified_signature(self):
-        self.assertRaises(URLError,url_response,'http://non.valid/?url')
+        self.assertRaises(URLError,self.checkurl.url_response,'http://non.valid/?url')
 
     def test_returns_string_when_validation_succeds(self):
-        self.assertIsInstance(url_response(VALID_URL), str)
+        self.assertIsInstance(self.checkurl.url_response(self.valid_url), str)
