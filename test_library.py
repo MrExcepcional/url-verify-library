@@ -14,7 +14,7 @@ VALID_URL = ('http://someserver.com/?'
             'B02K_ALG=03&B02K_CUSTID=9984&B02K_CUSTTYPE=02&'
             'B02K_MAC=EBA959A76B87AE8996849E7C0C08D4AC44B053183BE12C0DAC2AD0C86F9F2542'
 )
-TEST_INPUT_SECRET = '&inputsecret&'
+TEST_INPUT_SECRET = 'inputsecret'
 
 class Url_reading(unittest.TestCase):
     """docstring for Url_reading"""
@@ -37,11 +37,22 @@ class Url_reading(unittest.TestCase):
         for key in keys:
             self.assertIn(key, result, f'missing {key} in the given_url')
 
+    def test_extract_supports_non_ascii_letters(self):
+        windows_1252_encoded_url = ('http://someserver.com/?'
+            'B02K_VERS=0003&B02K_TIMESTMP=50020181017141433899056&'
+            'B02K_IDNBR=2512408990&B02K_STAMP=20010125140015123456&'
+            'B02K_CUSTNAME=V%C4IN%D6%20M%C4KI&B02K_KEYVERS=0001&'
+            'B02K_ALG=03&B02K_CUSTID=9984&B02K_CUSTTYPE=02&'
+            'B02K_MAC=EBA959A76B87AE8996849E7C0C08D4AC44B053183BE12C0DAC2AD0C86F9F2542'
+        )
+        result = _extract(windows_1252_encoded_url)
+        self.assertEqual('VÄINÖ MÄKI', result['B02K_CUSTNAME'][0])
+
 
 class Signature_verification(unittest.TestCase):
     """docstring for signature_verification"""
 
-    def test_returns_false_with_bad_url(self):
+    def test_is_valid_signature_returns_false_with_bad_url(self):
         bad_url = 'http://badurl.com/?with&strage=data'
         self.assertFalse(is_valid_signature(bad_url, TEST_INPUT_SECRET))
 

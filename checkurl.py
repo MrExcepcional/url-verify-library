@@ -22,9 +22,10 @@ def is_valid_signature(given_url, input_secret):
         B02K_MAC = extracted_data.popitem()[1][0].lower()
         # Unpack data values
         values = [value[0] for value in extracted_data.values()]
+        values.append(input_secret)
         # Based on the assignment example format to calculate signature
         # join values separated by '&' simbol
-        asembly = "&".join(values) + input_secret
+        asembly = "&".join(values) + '&'
         encoded = asembly.encode("cp1252")
         # We add the input_secret before hash calculation.
         calculated_signature = hashlib.sha256(encoded)
@@ -32,4 +33,4 @@ def is_valid_signature(given_url, input_secret):
     return False
 
 def url_response(incoming_url):
-    raise URLError(reason="Could not verify url signature")
+    raise URLError(reason="Bad Request -Invalid URL")
