@@ -60,8 +60,13 @@ class Output_url(LibraryTest):
     """docstring for test_output_url"""
 
     # TODO: Let's mock is_valid_signature to return false here
-    def test_returns_error_url_from_non_verified_signature(self):
+    def test_rises_error_url_from_non_verified_signature(self):
         self.assertRaises(URLError,self.checkurl.url_response,'http://non.valid/?url')
 
     def test_returns_string_when_validation_succeds(self):
         self.assertIsInstance(self.checkurl.url_response(self.valid_url), str)
+
+    def test_returns_full_query_string(self):
+        expected_query = ('?firstname=First&lastname=Last&hash= '
+            '4f6536ca2a23592d9037a4707bb44980b9bd2d4250fc1c833812068ccb000712')
+        self.assertEqual(self.checkurl.url_response(self.valid_url), expected_query)
