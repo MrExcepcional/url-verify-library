@@ -25,11 +25,15 @@ def _extract(given_url):
         print(e)
         return False
 
-def is_valid_signature(given_url):
+def is_valid_signature(given_url, input_secret):
     extracted_data = _extract(given_url)
-    #if extracted_data:
-    B02K_MAC = extracted_data.popitem()
-    encoded = "".join(extracted_data.values()).encode('cp1252')
-    calculated_signature = hashlib.sha256(encoded)
-        #return calculated_signature == B02K_MAC
+    if extracted_data:
+        B02K_MAC = extracted_data.popitem()[1].lower()
+        # Based on the assignment example format to calculate signature
+        # Values separated by '&' simbol and '%20' decoded to a blank space
+        encoded = "&".join(extracted_data.values()).replace('%20',' ').encode('cp1252')
+        # We add the input_secret before hash calculation.
+        encoded += input_secret
+        calculated_signature = hashlib.sha256(encoded)
+        return calculated_signature.hexdigest() == B02K_MAC
     return False
