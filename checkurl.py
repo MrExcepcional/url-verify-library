@@ -9,6 +9,7 @@ from urllib.error import URLError
 ENCODING = 'cp1252'
 # We better not hard-code the secret
 INPUT_SECRET = os.environ.get('SECRET')
+# TODO: consider changing these functions in to a class methods
 
 
 def _extract(given_url):
