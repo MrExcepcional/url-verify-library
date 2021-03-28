@@ -13,7 +13,7 @@ VALID_URL = ('http://someserver.com/?'
             'B02K_ALG=03&B02K_CUSTID=9984&B02K_CUSTTYPE=02&'
             'B02K_MAC=EBA959A76B87AE8996849E7C0C08D4AC44B053183BE12C0DAC2AD0C86F9F2542'
 )
-TEST_INPUT_SECRET = b'&inputsecret&'
+TEST_INPUT_SECRET = '&inputsecret&'
 
 class Url_reading(unittest.TestCase):
     """docstring for Url_reading"""
@@ -35,16 +35,17 @@ class Url_reading(unittest.TestCase):
         )
         for key in keys:
             self.assertIn(key, result, f'missing {key} in the given_url')
-    def test_extract_returns_false_with_bad_url(self):
-        bad_url = 'http://badurl.com/?with&corrupted=data'
-        self.assertFalse(_extract(bad_url))
 
 
 class Signature_verification(unittest.TestCase):
     """docstring for signature_verification"""
 
+    def test_returns_false_with_bad_url(self):
+        bad_url = 'http://badurl.com/?with&corrupted=data'
+        self.assertFalse(is_valid_signature(bad_url, TEST_INPUT_SECRET))
+
     def test_output_is_error_url_from_unverified_signature(self):
-        corrupted_data = ('http://example.com/?b02k_custname=mrmalware&'
+        corrupted_data = ('http://example.com/?b02k_custname=mr%20malware&'
             'b02k_mac=267d3b81a9dcd937f3b46a17a57fc0ca2133373389336861142673a73fc17bc6')
         self.assertFalse(is_valid_signature(corrupted_data, TEST_INPUT_SECRET))
 
