@@ -41,5 +41,15 @@ def is_valid_signature(given_url):
 
 def url_response(incoming_url):
     if is_valid_signature(incoming_url):
-        return ''
+        query = parse.urlparse(incoming_url).query
+        data = parse.parse_qs(query, encoding = ENCODING,
+            keep_blank_values = True
+            )
+        return data['B02K_CUSTNAME'][0].title()
     raise URLError(reason="Bad Request -Invalid URL")
+
+
+
+if __name__ == '__main__':
+    url = input('Enter a valid URL: ')
+    print('Your new signed URL is: ' + url_response(url))
