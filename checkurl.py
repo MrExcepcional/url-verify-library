@@ -5,7 +5,7 @@ from urllib import parse
 from urllib.error import URLError
 
 
-ENCODING = 'utf-8'
+ENCODING = 'cp1252'
 
 def _extract(given_url):
     try:
