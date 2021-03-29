@@ -63,5 +63,8 @@ def url_response(incoming_url):
 
 
 if __name__ == '__main__':
+    # Test purpose secrets:
+    INPUT_SECRET = 'inputsecret'
+    OUTPUT_SECRET = 'outputsecret'
     url = input('Enter a valid URL: ')
-    print('Your new signed URL is: ' + url_response(url))
+    print('\nYour new signed URL is: ' + url_response(url))
