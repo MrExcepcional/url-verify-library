@@ -1,0 +1,32 @@
+* 6798e65 Releases final version 1.0 and adds final lines to README.md
+* f91704c Back to passing state. We did not break anything else. Hurraygall
+* 131fc4a still failing test for test_returns_full_new_query_string. Readme incomplete yet. Electricity out
+* ad50c69 Adds python badge to readme
+* 4e518ae adds a requirements placeholder and a README file with project title on it
+* b53b72c Failing last output test
+* b3208c5 Refactorizes to obtain TEST_SECRET form os.environ instead of passing it as argument.
+* 1f3c340 New Output_url failing test to make sure retruns string from succesful validation
+* 755fa2f Back to working state. All tests pasing
+* c75207c Changes encoding to utf-8 to ensure test fails when cp1252 is not supported
+* 0f64237 Adds non-ascii support test. Passing test, but we need to be sure the test fails if windows-1252 is not supported.
+* 0e4dbca passing test. Output_url class is still incomplete
+* 9c7bdc5 Failing test for url_response from non verified signature
+* 576cc13 Refactor using urllib.parse to extract data
+* 240e52b Implements correct valid_url handling to validate signature. Passing test_is_valid_signature_from_integral_signature
+* a9256ca Formats url and keys to 'upper' keeping it closer to example format. Readability improvements
+* 3efce57 Adds try-except block to handle incomplete or wrong urls. _extract returns False when fails to obtain data
+* c5fa8b2 failing test for valid signature. Refactorizes self.valid_url to be used in all test clases as VALID_URL
+* 414bf3a changes library names to make more sense.
+* 1c930e0 New failing and incomplete test for extract when recives bad url
+* dd8b977 extract function implements search and return all expected keys and values from valid_url. Passing Url_reading tests
+* 6da1ed3 lowers keys strings in test_extract_returns_all_10_items_from_valid_url and modifies an assert message
+* 5ee5318 adds specific item key search to test_extract_returns_all_10_items_from_valid_url. Expected failing test
+* 946f497 passing test_extract_returns_dict...
+* 488f4e8 failing test_extract_returns_dict...
+* 9129f04 passing test_extract_returns_all_10_items_from_valid_url
+* 6383b66 failing test for extract function
+* 1542cf0 just changes the test name
+* 8fc414e adds minimal code to pass the first test
+* 43fbd78 erases the auto-generated __init__() to avoid any conflict with TestCase setup
+* 818a43e creates first failing unittest
+* 9d27531 adds first entry to .gitignore
