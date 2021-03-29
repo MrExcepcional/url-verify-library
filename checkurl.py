@@ -8,8 +8,9 @@ from urllib.error import URLError
 # Constant variables
 ENCODING = 'cp1252'
 # We better not hard-code the secret
-INPUT_SECRET = os.environ.get('SECRET')
-# TODO: consider changing these functions in to a class methods
+INPUT_SECRET = os.environ.get('SECRET_IN')
+OUTPUT_SECRET = os.environ.get('SECRET_OUT')
+# TODO: consider changing the following functions in to class methods
 
 
 def _extract(given_url):
@@ -39,13 +40,24 @@ def is_valid_signature(given_url):
         return calculated_signature.hexdigest() == B02K_MAC
     return False
 
+# TODO: This query assembly looks ugly. Let's refactor
 def url_response(incoming_url):
     if is_valid_signature(incoming_url):
         query = parse.urlparse(incoming_url).query
         data = parse.parse_qs(query, encoding = ENCODING,
             keep_blank_values = True
             )
-        return data['B02K_CUSTNAME'][0].title()
+        firstname, lastname = data['B02K_CUSTNAME'][0].title().split()
+        hash_calculation_string = '&'.join([
+            f'firstname={firstname}',
+            f'lastname={lastname}',
+            ]
+        )
+        hash_calculation_string += f'#{OUTPUT_SECRET}'
+        encoded = hash_calculation_string.encode(ENCODING)
+        calculated_signature = hashlib.sha256(encoded)
+        return '?'+hash_calculation_string.split('#')[0]+'&hash='+calculated_signature.hexdigest()
+
     raise URLError(reason="Bad Request -Invalid URL")
 
 
