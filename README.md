@@ -6,6 +6,8 @@ This library is a solved code challenge to implement an unit tested URL signatur
 ## 📦 Installation
 
 Use of python3.9 recommended. You can find it [here](https://www.python.org/downloads/release/python-392/)
+Clone the project in your local machine with 
+`git clone https://github.com/MrExcepcional/url-verify-library.git`
 
 ## 🚀 How to use
 
@@ -19,3 +21,5 @@ To run tests
 ```bash
 python3.9 -m unittest test_library
 ```
+
+feel free to break some library functions to see how tests are working
